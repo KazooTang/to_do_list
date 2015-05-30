@@ -1,0 +1,56 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Lists</h1>
+
+<table class="table">
+  <thead>
+    <tr>
+        <!--     <th>Done</th> --!>
+        <th>Title</th>
+        <th>Description</th>
+        <th>Status</th>
+        <th>Deadline</th>
+        <th>Updated at</th>
+        <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @lists.each do |list| %>
+        <tr class=<%= list.status %>>
+        <!--            <td>
+            <%# check_box_tag 'list[status]', 'done', list.status == 'done' ? true : false %>
+            </td> 
+            --!>
+            <td><%= list.title %></td>
+            <td><%= simple_format(list.description) %>
+                <% if list.comments || list.status != 'done' %>
+                    <table class="table">
+                    <% list.comments.each do |c| %>
+                        <tr>
+                            <td><%= simple_format(c.message) %></td>
+                            <td><%= link_to 'Destroy', c, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+                        </tr>
+                    <% end %>
+                    </table>
+                <% end %>
+                <%= form_tag comments_path do %>
+                    <%= hidden_field_tag 'comment[list_id]', list.id %>
+                    <%= text_field_tag 'comment[message]', nil, size: 50, placeholder: 'meow' %>
+                    <%= submit_tag "comment" %>
+                <% end %>
+            </td>
+            <td><%= list.status %></td>
+            <td><%= list.deadline %></td>
+            <td><%= list.updated_at %></td>
+            <td><%= link_to 'Show', list %></td>
+            <td><%= link_to 'Edit', edit_list_path(list) %></td>
+            <td><%= link_to 'Destroy', list, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Item', new_list_path %>
